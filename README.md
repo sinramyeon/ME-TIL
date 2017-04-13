@@ -16,5 +16,5 @@
 
 ##### 9XD의 [milloy](https://github.com/milooy/TIL/blob/master/README.md)님께 영감을 받아 시작했습니다.
 ```
-:rainbow:HERO:kr:
+ :rainbow:  :shipit: HERO :kr: 
 ```
