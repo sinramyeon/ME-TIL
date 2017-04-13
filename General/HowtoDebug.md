@@ -17,7 +17,7 @@
 이 기능이 오류가 난다 하면 이 기능이 어떤 메서드나 액션에서 벌어지는지 확인하고, 이 기능을 호출하는 곳은 어디인지 찾아보자.
 어떤 메서드를 어디서 호출하는지 찾으려면 메서드 이름을 드래그한 후 우클릭해서 Reference -> Workspace 로 찾는다.
 
-!(https://github.com/hero0926/HERO_TIL/blob/master/General/DEBUG_ref1.PNG)
+![이 메서드가 사용된 곳 찾는 방법](https://raw.githubusercontent.com/hero0926/HERO_TIL/master/General/DEBUG_ref1.PNG)
 
 이렇게 메서드마다 타고 가서 log를 찍어서, 어디서부터 어디까지는 실행이 되고 안 되는지, 어떤 파라미터가 들어오고 어떤 결과가 생기는지 확인한다.
 
