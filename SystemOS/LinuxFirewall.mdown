@@ -1,0 +1,63 @@
+### 리눅스에서 방화벽 설정하기
+
+<hr/>
+[참고한 링크1](http://blog.miyam.net/7)
+[참고한 링크2](https://www.lesstif.com/pages/viewpage.action?pageId=22053128)
+
+<hr/>
+
+#### CentOS6
+
+##### iptables 를 쓰고 있습니다.
+
+방화벽 환경설정
+
+`vi /etc/sysconfig/iptables`
+
+방화벽에 포트 추가하기
+
+`-A INPUT -m state --state NEW -m tcp -p tcp --dport 8080 -j ACCEPT`
+
+방화벽 켜기
+
+`/etc/init.d/iptables start`
+
+방화벽 끄기
+
+`/etc/init.d/iptables stop`
+
+방화벽 재시작
+
+`/etc/init.d/iptables restart`
+
+방화벽 상태
+
+`/etc/init.d/iptables status`
+`netstat -ntl`
+
+#### CentOS7
+
+##### 얘는 firewall을 쓰고 있습니다. ~~왠지 iptables 명령어가 안 먹더라~~
+
+방화벽 환경설정
+
+`vi /etc/firewalld/zones/public.xml`
+
+방화벽에 포트 추가하기
+
+`firewall-cmd --zone=public --add-port=8080/tcp`
+
+방화벽에 포트 제거하기
+
+`firewall-cmd --zone=public --remove-port=8080/tcp`
+
+방화벽 재시작
+
+`firewall-cmd --reload`
+
+방화벽 상태
+
+* 사전 정의된 존 `firewall-cmd --get-zones`
+* 전체 존 목록 `firewall-cmd --list-all-zones`
+* 기존 존 `firewall-cmd --get-default-zone`
+* 활성화된 존 `firewall-cmd --get-active-zone`
