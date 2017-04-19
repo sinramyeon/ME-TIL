@@ -108,11 +108,6 @@ git commit --amend
 
 `방금전 한 커밋 메시지 수정`
 
-git commit -am "애드커밋한큐에"
-
-`제일 자주 쓸 듯...`
-
-
-
-
 git push
+
+`커밋을 반영합니다.`
