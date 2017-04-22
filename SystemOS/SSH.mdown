@@ -1,0 +1,33 @@
+#### SSH란 무엇일까?
+
+##### Secure Shell
+
+---
+
+> SSH는 네트워크를 통해 원격으로 다른 호스트에 액세스하는 과정을 보호하기 위해 설계
+
+
+###### 자주 사용하는 약어
+
+- API Apllication programming interface
+- FTP File Transfer Protocol
+- IETF Internet Engineeing Task Force
+- POSIX Portable Operation System Interfade for UNIX
+- RFC Request for Comments
+- VPNN Virtual private network
+
+
+###### SSH 아키텍쳐 - 안전하지 않은 네트워크를 통해 원격 로그인을 하거나 기타 안전한 네트워크 서비스를 이용하는 데 필요한 안전한 쉘 프로토콜
+
+1. 전송 계층 프로토콜 : 전방향 개인정보 보호정책을 사용한 무결성, 서버 인증 및 개인정보 보호 기능 제공. 선택적 압축 기능 제공, TCP/IP연결을 거쳐 실행, 다른 신뢰할 수 있는 데이터 스트림상에서도 사용 가능
+
+2. 사용자 인증 프로토콜 : 서버에서 클라이언트 인증(Ex : 비밀번호, 공개 키, keyboard-interactive, GSSAPI, SecureID, PAM), 전송 계층에서 실행
+
+3. 연결 프토로콜 : 암호화된 터널을 다수의 논리적 채널로 다중화, 사용자 인증 프로토콜에서 실행
+
+###### 리눅스 내 사용 예제
+
+` ssh 서버명 `
+
+
+***어려워~! 나중에 한번 더 공부!***
