@@ -1,8 +1,13 @@
 #### SSH란 무엇일까?
 
-##### Secure Shell
+---
+
+[참고자료](http://delspon.blogspot.kr/2015/05/ssh.html)
+[참조자료](http://blog.naver.com/PostView.nhn?blogId=netmania78&logNo=120048392926)
 
 ---
+
+##### Secure Shell
 
 > SSH는 네트워크를 통해 원격으로 다른 호스트에 액세스하는 과정을 보호하기 위해 설계
 
@@ -27,7 +32,12 @@
 
 ###### 리눅스 내 사용 예제
 
+ssh 시작
+
 ` ssh 서버명 `
 
+포트번호 따로 부여
+
+` ssh -p 포트명 서버명`
 
 ***어려워~! 나중에 한번 더 공부!***
