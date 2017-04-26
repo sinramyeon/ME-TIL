@@ -3,7 +3,7 @@
 ---
 ##### DDL, DML, DCL
 
- | | | 
+약어 | 정의 | 예시
 ---- | ----- | ------
 DDL | Data Definition Language | Create, Alter, Drop, Truncate, Grant, Revoke, Comment
 DML | Data Manipulation Language | Insert, Update, Delete, Select, Lock table, Explain plan, call
