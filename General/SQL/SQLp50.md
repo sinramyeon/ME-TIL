@@ -224,3 +224,103 @@ SQL> INSERT INTO s_emp (id, first_name, last_name,
 
 - USER : 현재 유저 이름
 - SYSDATE : 현재 시스템 일자, 시간
+
+---
+
+- 데이터 수정하기(update)
+
+`Update s_emp set dept_id = 10 where id = 2`
+
+Ex1)
+두 개 이상의 항목 수정
+
+```
+Update s_emp
+set dempt_id = 32, salary = 2550
+where id = 1
+```
+
+Ex2)
+두 개 이상의 Row 수정
+
+```
+Update s_emp
+set manager_id = 1
+where dept_id = 41
+```
+
+Ex3)
+테이블 내 모든 Row 수정
+
+```
+Update s_emp
+set commission_pct = 10;
+```
+
+---
+
+- 데이터 삭제하기(delete)
+
+`Delete from s_dept where id = 52`
+
+Ex1)
+테이블 내 모든 Row 삭제
+
+```
+Delete from test;
+````
+
+---
+
+- 트랙잭션
+
+- 트랜잭션의 정의 : 데이터베이스의 상태를 변화시키기 위해 수행하는 작업의 단위
+- 트랜잭션의 특성 : Atomicity, Consistency, Isolation, Durability
+
+정의 | 뜻
+--- | ---
+원자성 | 트랜잭션은 데이터베이서에 모두 반영되거나 또는 아예 반영되지를 말아야 한다.
+일관성 | 트랜잭션의 작업 처리 결과는 항상 일관성이 있어야 한다.
+독립성 | 어느 하나의 트랜잭션이라도 다른 트랜잭션 연산에는 끼어들 수 없다.
+지속성 | 트랜잭션이 성공적으로 완료되었을 경우, 결과는 영구적으로 반영되어야 한다.
+
+- 커밋(Commit) : 하나의 트랜잭션 안 모든 변화를 데이터베이스에 영구적으로 반영
+- 롤백(Rollback) : 을 취소함
+
+*커밋이나 롤백 전은?*
+
+- 모든 데이터는 데이터베이스 버퍼에 저장
+- 현 사용자는 자신이 변화시킨 데이터를 select 해서 볼 수 있음
+- 나머지는 그러지 못함
+- 자신이 변화시킨 Row는 록(Lock)이 걸려 있어서 타 사용자는 변화시키지 못함(*Row level Locking Mechanism*)
+
+*그럼 커밋 후에는?*
+
+- 트랜잭션 내부에서 변화된 내용은 데이터베이스에 영구적으로 반영됨
+- 타 사용자도 변화된 내용을 볼 수 있다.
+
+---
+
+- SQL 외부 변수 받아들이기
+
+```
+Set echo off
+insert into s_region(id,name)
+values(& region_id, '& region_name')
+/
+```
+
+- set echo off : 명령이 표시되지 않게 off한다
+- / : 실행
+
+- 외부에서 받아들일 변수 앞에 & 기호
+- && 사용시 한 번의 외부 변수 사용으로 Scripts 전체에 사용 가능
+
+ ```
+ Start add_region
+ input truncated 1 characters
+ enter value for region_id : 6
+ enter value for region_name : california
+ old 2 : values(& region_id, '& region_name')
+ new 2 : values(6, 'California')
+ ```
