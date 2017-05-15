@@ -89,14 +89,21 @@ SQL> SELECT constraint_name, constraint_type,
 
 제약조건 종류
 
-> C : CHECK Constraint
- P : PRIMARY KEY Constraint
- U : UNIQUE KEY Constraint
- R : FOREIGN KEY Constraint
+> C : CHECK Constraint<br>
 
-> USER_CONS_COLUMNS
-> 제약조건(Constraint)에 참가한 컬럼을 저장하고 있는 데이터 사전 뷰(Data Dictionary View)이다.
+> P : PRIMARY KEY Constraint<br>
+
+> U : UNIQUE KEY Constraint<br>
+
+> R : FOREIGN KEY Constraint<br>
+
+<br>
+
+> USER_CONS_COLUMNS<br>
+
+> 제약조건(Constraint)에 참가한 컬럼을 저장하고 있는 데이터 사전 뷰(Data Dictionary View)이다.
 >
+<br>
  
 `DESCRIBE user_cons_columns`
 ```
