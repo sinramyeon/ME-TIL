@@ -41,11 +41,11 @@ org.springmodules.validation.valang.javascript.taglib.ValangCodebaseTag
 
 1. localhost:8080 으로 접속하면 와일드플라이 접속화면이 뜬다.
 
-![접속화면]("wildfly_start.PNG")
+![접속화면](https://github.com/hero0926/HERO_TIL/blob/master/Web_backend/Server/wildfly_start.PNG)
 
 2. Administration Console에 들어가서 유저 추가를 해준다.
 
-![접속화면]("wildfly_start.PNG")
+![접속화면](https://github.com/hero0926/HERO_TIL/blob/master/Web_backend/Server/wildfly_admin.PNG)
 
 wildfly-8.2.0.Final\bin 안에 add-user.bat 을 켭니다.
 `add-user bat start`
@@ -63,18 +63,18 @@ username과 password, group(이건 필수가 아님)을 골라
 - WildFly db 설정방법
 
 
-![db]("wildfly_db2.PNG")
+![db](https://github.com/hero0926/HERO_TIL/blob/master/Web_backend/Server/wildfly_db2.PNG)
 
 이클립스 내 database.properties를 설정하고,
 datasource 설정 context 파일 내 jndi를 선언한다.
 
 
-![db]("wildfly_db1.PNG")
+![db](https://github.com/hero0926/HERO_TIL/blob/master/Web_backend/Server/wildfly_db1.PNG)
 
 http://127.0.0.1:9990 화면의 Configuration > Connector > Datasources > Add로 들어갑니다.
 
-![db]("wildfly_db3.PNG")
+![db](https://github.com/hero0926/HERO_TIL/blob/master/Web_backend/Server/wildfly_db3.PNG)
 
-![db]("wildfly_db4.PNG")
+![db](https://github.com/hero0926/HERO_TIL/blob/master/Web_backend/Server/wildfly_db4.PNG)
 
 위와 같은 순서로 내용을 입력 후 추가하고, Enable 해주면 됨
