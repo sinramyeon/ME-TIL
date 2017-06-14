@@ -8,6 +8,7 @@
 - [General](#General) 개발일반상식
 - [Web_frontend](#Web_frontend) 프론트엔드 상식
 - [Web_backend](#Web_backend) 백엔드 상식
+	-[Server](#Server) 서버 상식
 - [SystemOS](#SystemOS) 리눅스와 함께하기
 - [MakeGame](#MakeGame) 게임 만들기
 - [Tool](#Tool) 다양한 툴 활용기
