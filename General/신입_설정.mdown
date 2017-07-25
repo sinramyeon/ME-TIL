@@ -2,49 +2,12 @@
 
 `C:\windows\system32\drivers\etc\hosts` 파일에 다음 내용을 추가합니다.
 
-```
-# gitlab
-180.70.96.181 gitlab.interpark.com
-
-192.168.28.115 book.interpark.com
-
-127.0.0.1 italk.interpark.com
-127.0.0.1 api-italk-book.interpark.com
-127.0.0.1 up-italk-book.interpark.com
-127.0.0.1 file-italk-book.interpark.com
-127.0.0.1 admin-italk-book.interpark.com
-127.0.0.1 chat-italk-book.interpark.com
-127.0.0.1 wss-italk-book.interpark.com
-127.0.0.1 mqtts-italk-book.interpark.com
-127.0.0.1 gate-italk-book.interpark.com
-```
----
-
-# 깃랩 주소
-
-`http://gitlab.interpark.com/users/sign_in`
-
-## 깃 설치 후 위 저장소 클론
-
-### 위치 `D:/Interpark/chatbot`
-
-```
-git clone http://gitlab.interpark.com/dev_mnc/itoys_chat.git
-git clone http://gitlab.interpark.com/dev_mnc/itoys_admin.git
-git clone http://gitlab.interpark.com/dev_mnc/itoys_docker.git
-```
 
 ## 소스트리 설치
 `www.sourcetreeapp.com`
 
 1. 저장소 추가
 2. 저장소를 다운받은 `D:/Interpark/chatbot` 내 chat, admin docker 차례로 추가
-
----
-
-# 인터파크 위키
-
-https://tech-wiki.interpark.com/dashboard.action#starred
 
 ---
 
