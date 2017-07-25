@@ -1,0 +1,125 @@
+# Host파일 변경
+
+`C:\windows\system32\drivers\etc\hosts` 파일에 다음 내용을 추가합니다.
+
+```
+# gitlab
+180.70.96.181 gitlab.interpark.com
+
+192.168.28.115 book.interpark.com
+
+127.0.0.1 italk.interpark.com
+127.0.0.1 api-italk-book.interpark.com
+127.0.0.1 up-italk-book.interpark.com
+127.0.0.1 file-italk-book.interpark.com
+127.0.0.1 admin-italk-book.interpark.com
+127.0.0.1 chat-italk-book.interpark.com
+127.0.0.1 wss-italk-book.interpark.com
+127.0.0.1 mqtts-italk-book.interpark.com
+127.0.0.1 gate-italk-book.interpark.com
+```
+---
+
+# 깃랩 주소
+
+`http://gitlab.interpark.com/users/sign_in`
+
+## 깃 설치 후 위 저장소 클론
+
+### 위치 `D:/Interpark/chatbot`
+
+```
+git clone http://gitlab.interpark.com/dev_mnc/itoys_chat.git
+git clone http://gitlab.interpark.com/dev_mnc/itoys_admin.git
+git clone http://gitlab.interpark.com/dev_mnc/itoys_docker.git
+```
+
+## 소스트리 설치
+`www.sourcetreeapp.com`
+
+1. 저장소 추가
+2. 저장소를 다운받은 `D:/Interpark/chatbot` 내 chat, admin docker 차례로 추가
+
+---
+
+# 인터파크 위키
+
+https://tech-wiki.interpark.com/dashboard.action#starred
+
+---
+
+# Docker용 설정
+
+## docker toolbox 설치(Win64bit)
+
+`https://www.docker.com/products/docker-toolbox` 에서 도커 툴박스, vm, kitematic을 설치하세요.
+
+## docker https 인증서 설치
+
+`C:\Users\자신의 계정` 아래 `bootlocal.sh`와 `HQSSL.crt` 저장
+
+```
+docker-machine ssh $MACHINE
+sudo -i
+cp /c/Users/자신의 계정/bootlocal.sh /var/lib/boot2docker/
+chmod 755 /var/lib/boot2docker/bootlocal.sh
+mkdir /var/lib/boot2docker/certs
+cp /c/Users/자신의 계정/HQSSL.crt /var/lib/boot2docker/certs
+exit
+exit
+docker-machine restart $MACHINE
+```
+
+`docker-machine restart $MACHINE` 명령어를 실행 시 `-sh : docker-machine : not found` 오류 발생 시 `exit` 후 다시 한번 실행 해 보세요.
+
+## docker DNS 설정
+
+docker cmd 내에서 `echo "nameserver 8.8.8.8" >> /etc/resolv.conf`로 설정합니다.
+`docker-machine ssh`와 `sudo -i`로 도커 커맨드에 접속한 후, `echo "nameserver 8.8.8.8" > /etc/resolv.conf`로 설정을 완료합니다.
+
+## oracleVM virtualbox 관리
+
+설정 > 공유 폴더 내 "C\Users" 를 삭제하지 않습니다.
+
+네트워크 > 어댑터1 > 포트포워딩 내 아래와 같이 포트를 추가합니다.
+
+```
+이름      | 프로토콜 | 호스트 IP | 호스트 포트 | 게스트 IP | 게스트 포트
+----------|----------|-----------|-------------|-----------|-------------
+Mqtt      |TCP       |           |   1883      |           | 1883
+WebSocket |TCP1884   |           |   1884      |           | 1884
+http      |TCP80     |           |   80        |           | 80
+https     |TCP443    |           |   443       |           | 443
+```
+
+## .yaml 환경파일 생성
+
+다운받은 `itoys_docker` 내 `tpl\italk\compose.tpl`을 확인합니다.
+`build\bin\init.exe`를 최상단 `itoys_docker`에 둡니다.
+
+docker 머신 내에서 `` (뭔갈 했음)
+
+---
+
+# docker 컨테이너 올리기
+
+`docker-compose.exe up` 명령어를 도커 머신 내에서 실행하여 이미지를 받아온 후 실행합니다.
+
+`docker ps`명령어로 컨테이너가 올라온 것을 확인 해 봅시다.
+
+---
+
+# nodejs 설치
+
+`https://nodejs.org/en/` 에서 노드를 설치 후에,
+`npm config set strict-ssl false` 로 인증서를 피해가고,
+`npm config set registry "http://registry.npmjs.org/"`
+`npm config set cache-min 999999` 적용
+
+---
+
+# go 설치
+
+`https://golang.org/dl/`에서 go를 설치 후에
+visual studio code 에서 workspace/bin, workspace/pkg, workspace/src 폴더를 만든다.
+go 관련 exe 파일들을 받아오기 위해 `git config --global http.sslVerify false`로 SSL을 우회한다.
