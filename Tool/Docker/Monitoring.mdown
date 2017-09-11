@@ -110,3 +110,10 @@ http://egloos.zum.com/mcchae/v/11195721
 http://hamait.tistory.com/537
 http://rootkey.tistory.com/11
 https://devops.profitbricks.com/tutorials/creating-a-grafana-and-influxdb-docker-container/
+https://blog.laputa.io/try-influxdb-and-grafana-by-docker-6b4d50c6a446
+http://www.popit.kr/influxdb_telegraf_grafana_3/
+https://geunhokhim.wordpress.com/2017/01/02/grafana-influxdb-telegraf-monitoring-server-alerting-automation/
+https://github.com/StackPointCloud/docker-influxdb#the-dockerfile
+https://coderwall.com/p/fg18jq/getting-started-influxdb-grafana-docker
+https://home-assistant.io/blog/2017/04/25/influxdb-grafana-docker/
+https://blog.laputa.io/try-influxdb-and-grafana-by-docker-6b4d50c6a446
