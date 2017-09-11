@@ -24,7 +24,7 @@ dockper pull telegraf:latest
 ```
 4.다운받은 이미지들의 태그와 이름을 확인할 수 있습니다.
 `docker images`
-5.
+5. 아래 명령어로 처음 시작할 수 있다.(이미지 이름이 너무 길기 때문에 편한 이름으로 변경)
 ```
 docker run -d \
   --name 나중에 지을 이름 \
@@ -35,7 +35,7 @@ docker run -d \
   -p 8125:8125/udp \
   samuelebistoletti/docker-statsd-influxdb-grafana:latest
 ```
-명령어로 처음 시작할 수 있다.(이미지 이름이 너무 길기 때문에 편한 이름으로 변경)
+
 6. `localhost:3000`, `localhost:3004`에서 각각 influxdb 와 grafana 확인이 가능하다.
 7. `docker ps` 명령어로 확인해보면 위 컨테이너가 작동중인것을 확인할 수 있습니다.
 8. grafana(http://localhost:3003/)에는 root/root로 로그인하면 된다.
