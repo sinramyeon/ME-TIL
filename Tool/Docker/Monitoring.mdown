@@ -57,7 +57,7 @@ docker run -d \
 
 #### influxdb 설정
 
-1. `sudo docker attach 컨테이너 이름`(아까 설정한 내용, 설정하지 않았다면 samuelebistoletti/docker-statsd-influxdb-grafana:latest)  으로 접속
+1. `sudo docker exec -i -t 컨테이너 이름 /bin/bash` 로 컨테이너 내로 접속. (아까 설정한 이름을 입력하거나, 설정하지 않았다면 samuelebistoletti/docker-statsd-influxdb-grafana:latest로 하면 됨)
 
 2. 컨테이너 내에서 `$ influx` 를 입력해 설정을 위해 들어갑니다.
 ```
