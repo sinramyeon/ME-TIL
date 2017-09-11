@@ -1,0 +1,112 @@
+# Docker를 활용해서 Tick stack 구축하기
+# Grafana, Influxdb, Telegraf, Glances, Kapacitor
+
+---
+
+## 설치해야 하는 목록
+> docker, grafana, influxdb, telegraf, glances, kapacitor
+
+---
+
+설치환경) MacOsX
+
+---
+
+### docker 설치
+
+1. macOs(현)에 docker를 설치한다. [참고](http://pyrasis.com/book/DockerForTheReallyImpatient/Chapter02/02)
+2. docker 에 ssh 로 접속한다. (permission 에러 시 sudo su 명령어 이용)
+3. docker에 위 세 이미지를 다운받는다
+```
+docker pull samuelebistoletti/docker-statsd-influxdb-grafana
+docker search telegraf
+dockper pull telegraf:latest
+```
+4.다운받은 이미지들의 태그와 이름을 확인할 수 있습니다.
+`docker images`
+5.
+```
+docker run -d \
+  --name 나중에 지을 이름 \
+  -p 3003:3003 \
+  -p 3004:8083 \
+  -p 8086:8086 \
+  -p 22022:22 \
+  -p 8125:8125/udp \
+  samuelebistoletti/docker-statsd-influxdb-grafana:latest
+```
+명령어로 처음 시작할 수 있다.(이미지 이름이 너무 길기 때문에 편한 이름으로 변경)
+6. `localhost:3000`, `localhost:3004`에서 각각 influxdb 와 grafana 확인이 가능하다.
+7. `docker ps` 명령어로 확인해보면 위 컨테이너가 작동중인것을 확인할 수 있습니다.
+8. grafana(http://localhost:3003/)에는 root/root로 로그인하면 된다.
+---
+
+### glances 설치
+
+1. `brew install python` 으로 파이썬부터 설치한다
+2. `which python` 으로 파이썬 설치 경로를 확인 할 수 있다. (`/usr/local/bin/python` 으로 보통 설치됩니다.)
+3. `sudo easy_install pip` 로 파이썬 패키지 관리자를 설치합니다.
+4. `pip install --user glances bottle` 로 glances와 bottle을 설치합니다.
+--user 로 안주면 에러가 발생할 때가 잦았음.
+5. `glances`, `glances -w` 로 작동을 확인합니다.
+`glances` 시 커맨드 내 작동 확인, `glances -w` 시 `localhost:61208`에서 웹으로 작동 확인
+
+---
+
+### glances, influxdb 연결
+
+#### influxdb 설정
+
+1. `sudo docker attach 컨테이너 이름`(아까 설정한 내용, 설정하지 않았다면 samuelebistoletti/docker-statsd-influxdb-grafana:latest)  으로 접속
+
+2. 컨테이너 내에서 `$ influx` 를 입력해 설정을 위해 들어갑니다.
+```
+influx > create database glances
+influx > exit
+```
+위 명령어로 glances관련 시계열db를 만듭니다. ( 타db 필요시에도 동일하게 합니다.)
+
+#### glances 설정
+
+1. `vi /usr/local/share/doc/glances/glances.conf` 로 glances.conf 내용을 설정합니다.
+```
+[influxdb]
+# Configuration for the --export-influxdb option
+# https://influxdb.com/
+host=localhost
+port=8086
+user=root
+password=root
+db=glances
+tags=host:자신의 아이피 주소
+prefix=localhost
+```
+
+2. `Glances --export-influxdb` 로 시작합니다.
+> `ImportError: No module named influxdb`오류 발생시<br>
+> influxdb module 이 없어서 오류가 나는 경우이니, `pip install influxdb 와 pip install --upgrade influxdb` 로 설치합니다.<br>
+> `No InfluxDB configuration found` 오류 발생시<br>
+> glances.conf 를 `/usr/local/etc/glances/glances.conf` 로 복사합니다.
+
+---
+
+### grafana와 연결
+
+1. `localhost:3003` 으로 접속하면, grafana datasource를 설정할 수 있습니다.
+
+![](http://pds27.egloos.com/pds/201512/06/18/a0105618_56642017135f9.png)
+2. 위와 같이 설정한 후에 test & save 로 작동을 확인합니다.
+3. 대쉬보드가 새로 생겼다면 Add Graph 등으로 Metric에서 필요 Query를 수정하여 보고싶은 자료를 보고싶은 시간 단위별로 볼 수 있습니다.
+```
+WHERE $timeFilter (시계열 데이터베이스에서 자동 대입되는 시간 정보)
+GROUP BY time($interval) (내가 정하고 싶은 인터벌)
+```
+
+---
+
+#### 참고
+
+http://egloos.zum.com/mcchae/v/11195721
+http://hamait.tistory.com/537
+http://rootkey.tistory.com/11
+https://devops.profitbricks.com/tutorials/creating-a-grafana-and-influxdb-docker-container/
