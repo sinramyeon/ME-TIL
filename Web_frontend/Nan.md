@@ -6,7 +6,8 @@
 
 
 Property attributes of NaN
-Writable  |	no
+
+Writable | no
 --------- | ----
 Enumerable | no
 Configurable | no
