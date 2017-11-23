@@ -6,7 +6,7 @@
 그러나 이 라이센스들은 결국 허용하는 범위 내에서 최대한의 자유를 보장하는 것으로 알아두고 충분히 활용하는 것이 유리하다.
 아래는 GPL, LGPL, BSD, Apache, MIT, MPL, Eclipse 라이센스의 내용들을 간단히 요약한 것으로 좀 더 자세한 내용을 원한다면 링크를 참조하자.
 
-![]()
+![](https://github.com/hero0926/HERO_TIL/blob/master/General/opensource_ref1.png?raw=true)
 
 
 각 라이선스들에 대해 간단히 설명을 하자면 다음과 같다.
