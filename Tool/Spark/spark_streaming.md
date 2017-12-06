@@ -115,7 +115,7 @@ tweepy를 사용하겠다.
 
 ```
 import tweepy
-from tweept import OAuthHandler, Stream
+from tweepy import OAuthHandler, Stream
 from tweepy.streaming import StreamListener
 import socket
 import json
@@ -172,11 +172,185 @@ if __name__ == "__main__" :
 
 만약 데이터 양이 그리 많지 않다면 이렇게 끝내도 되지만, 스파크를 더해 본다면 어떨까?
 
+---
+
+visualize 를 위해서는 `matplotlib` 과 `pandas` 를 추천한다.
+TweetRead.py 를 준비한다.
+    
+```
+import tweepy
+from tweepy import OAuthHandler
+from tweepy import Stream
+from tweepy.streaming import StreamListener
+import socket
+import json
+
+consumer_key=''
+consumer_secret=''
+access_token =''
+access_secret=''
 
 
+class TweetsListener(StreamListener):
 
+  def __init__(self, csocket):
+      self.client_socket = csocket
 
+  def on_data(self, data):
+      try:
+          msg = json.loads( data )
+          print( msg['text'].encode('utf-8') )
+          self.client_socket.send( msg['text'].encode('utf-8') )
+          return True
+      except BaseException as e:
+          print("Error on_data: %s" % str(e))
+      return True
 
+  def on_error(self, status):
+      print(status)
+      return True
 
+def sendData(c_socket):
+  auth = OAuthHandler(consumer_key, consumer_secret)
+  auth.set_access_token(access_token, access_secret)
 
+  twitter_stream = Stream(auth, TweetsListener(c_socket))
+  twitter_stream.filter(track=['soccer'])
 
+if __name__ == "__main__":
+  s = socket.socket()         # Create a socket object
+  host = "127.0.0.1"     # Get local machine name
+  port = 5555                 # Reserve a port for your service.
+  s.bind((host, port))        # Bind to the port
+
+  print("Listening on port: %s" % str(port))
+
+  s.listen(5)                 # Now wait for client connection.
+  c, addr = s.accept()        # Establish connection with client.
+
+  print( "Received request from: " + str( addr ) )
+
+  sendData( c ) 
+ 
+```
+
+그리고 zeppelin 창에서 아래와 같이(꼭 차례대로) 시행한다.
+*주의할 점*  아직 tweetread.py 는 실행하지 않고 내버려 둔다.
+
+```
+from pyspark import SparkContext
+
+from pyspark.streaming import StreamingContext
+
+from pyspark.sql import SQLContext
+
+from pyspark.sql.functions import desc
+```
+
+우선 파이스파크 모듈들을 준비한다.
+
+```
+# 스파크 콘텍스트는 한번만 만드는 겁니다.
+# 안그러면 오류가 납니다...
+sc = SparkContext()
+```
+
+그리고 스파크 콘텍스트를 생성한다.
+
+```
+ssc = StreamingContext(sc, 10 )
+sqlContext = SQLContext(sc)
+```
+
+스트리밍 콘텍스트 및 sql 콘텍스트를 생성한다.
+
+```
+socket_stream = ssc.socketTextStream("127.0.0.1", 5555) 
+```
+
+소켓스트림이란 트위터 스트리밍 api를 받아올 메서드이다. 아까 설정해 줬던 내 로컬 아이피와 포트 넘버 그대로 설정하면 된다.
+
+ 
+`lines = socket_stream.window( 20 ) ` 으로 소켓스트림 윈도우를 만들었다. 
+
+ 
+```
+from collections import namedtuple
+
+fields = ("tag", "count" )
+
+Tweet = namedtuple( 'Tweet', fields )
+```
+
+네임드튜플에 대해 잘 모르면 여기를 참고한다.
+트위터 api 문서를 보고, 내가 가지고오고싶은 내용을 참고해서 필드로 정해줬다.
+ 
+```
+( lines.flatMap( lambda text: text.split( " " ) ) #우선 띄어쓰기를 기준으로 리스트로 만든다. 워드카운트에서 했던 것과 동일하다.
+
+  .filter( lambda word: word.lower().startswith("#") ) #해시태그를 찾아왔다.
+
+  .map( lambda word: ( word.lower(), 1 ) ) # 단어들은 모두 소문자로 만들었다.(한글에서는 할필요가 없을 것 같다)
+
+  .reduceByKey( lambda a, b: a + b ) # 단어 세기
+
+  .map( lambda rec: Tweet( rec[0], rec[1] ) ) # 아까 만들어뒀던 Tweet 객체에 넣었다
+
+  .foreachRDD( lambda rdd: rdd.toDF().sort( desc("count") ) # DF에 넣는다. rdd를 여기서 dataframe으로 바꿔 주는 것이다.
+
+  .limit(10).registerTempTable("tweets") ) ) # 테이블에 등록했다. 이렇게 하면 고통스러운 spark문법 대신 sql쿼리로 쉽게 찾아올 수 있다.
+
+```
+
+여기까지 실행한 후, 아까 준비한 readtweet.py를 실행한다.
+`python3 readtweet.py` 로 실행 후, 아래의 문구를 실행해 우리의 스트림도 시작한다.
+
+``` 
+ssc.start()     
+``` 
+
+터미널에서 확인해보면 내 터미널 내에 내가 갖고오려던 트윗들이 사람들이 등록할때마다 뜨는 걸 볼 수 있다.
+
+그럼 이걸 바탕으로 쥬피터 노트북에서 (*제플린이 아님*) 결과를 내보겠다.
+
+```
+import time
+
+from IPython import display
+
+import matplotlib.pyplot as plt
+
+import seaborn as sns
+
+# 이 기능은 쥬피터에서만 가능한 것 같다.
+# 제플린에서는 안된다....
+%matplotlib inline 
+```
+ 
+```
+count = 0
+
+while count < 10:
+
+    
+
+    time.sleep( 3 )
+
+    top_10_tweets = sqlContext.sql( 'Select tag, count from tweets' )
+
+    top_10_df = top_10_tweets.toPandas()
+
+    display.clear_output(wait=True)
+
+    sns.plt.figure( figsize = ( 10, 8 ) )
+
+    sns.barplot( x="count", y="tag", data=top_10_df)
+
+    sns.plt.show()
+
+    count = count + 1
+```
+
+10개를 가져오면 잠깐 쉬면서, 태그, 카운트를 가지고 와서 판다스 테이블로 볼 수 있다.
+
+물론 이 기능은, 제플린에서도 적용해 볼 수 있겠으나 지금 있는 제플린이 운영 제플린인 이유로 제플린 내에서는 시험해보지 못했다....
