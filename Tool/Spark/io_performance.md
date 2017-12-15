@@ -215,16 +215,19 @@ ids.map(inc_and_note).collect()
 ### 기타 잡기
 
 1. RDD 를 하나 만들고 다시쓴다?
-	2. `memory, memory_and_disk` 옵션으로 따로 보관해 둔다.
+
+`memory, memory_and_disk` 옵션으로 따로 보관해 둔다.
 
 2. 무조건 groupByKey()만 안쓰면 된다?
-	3. 확실히 정말 느리다. `sql, pandas` 옵션을 선택하는게 정신 건강에 이롭다.
-	4. `groupByKey()`대신에 아래를 활용한다.
-	5.  `reduceByKey()` : 타입이 같을때
-	6.  `aggregateByKey()` :  타입이 같지 않아도 사용할 수 있음
+
+확실히 정말 느리다. `sql, pandas` 옵션을 선택하는게 정신 건강에 이롭다.
+`groupByKey()`대신에 아래를 활용한다.
+	`reduceByKey()` : 타입이 같을때
+	`aggregateByKey()` :  타입이 같지 않아도 사용할 수 있음
 
 3. 파티션 하나당 2gb의 사이즈 제한이 있음을 기억한다.
 
 4. rdd대신 dataframe에 익숙해 진다?
-	5. jvm 안에 데이터를 넣어두고 파이썬은 쿼리에만 신경쓰게 한다.
-	6. py4j등을 활용해서 자파이썬 형태로 짬뽕 시킨다.
+
+jvm 안에 데이터를 넣어두고 파이썬은 쿼리에만 신경쓰게 한다.
+py4j등을 활용해서 자파이썬 형태로 짬뽕 시킨다.
