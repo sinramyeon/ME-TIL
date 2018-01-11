@@ -4,7 +4,8 @@
 
 데이터프레임을 사용하여서 rdd에서의 불편을 해소해볼 수 있다.
 
-## 데이터프레임
+
+## 데이터프레임[https://github.com/hero0926/HERO_TIL/blob/master/Tool/Spark/dataframe.md]
 
 row를 가지고 있고 스키마를 갖고 있다. sql쿼리로 굴릴 수 있으며, json, hive, parquet를 지원한다. jdbc/odbc와도 연동이 가능하다.
 
