@@ -191,7 +191,7 @@ raw.show()
 
 실수로 `.collect()`를 해버리면 아주아주 아주많이 느려지기 때문에, `collect()`연산은 소량 데이터에만 적용하자. 이렇게 하면 대강의 데이터의 모습이 어떻게 생겼는지 확인할 수 있다.
 
-![로그그림]()
+![로그그림](https://github.com/hero0926/HERO_TIL/blob/master/Tool/Spark/ex1.png)
 
 로그 데이터는 지금 이렇게 생겼다.
 
@@ -397,7 +397,7 @@ joins_df.createOrReplaceTempView("test")
 
 이렇게 생성한 테이블은 아래와 같이 생겼다.
 
-![너무커서짤린그림]()
+![너무커서짤린그림](https://github.com/hero0926/HERO_TIL/blob/master/Tool/Spark/ex2.png)
 
 이제 각 대화 상태 별 개수 또한 세어볼 수 있다.
 
