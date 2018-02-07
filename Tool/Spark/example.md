@@ -1,3 +1,609 @@
+[ENG]
+
+
+# spark analysis
+
+to Analyse our chatbot tour log data, i should know the configuration of data.
+
+the tour log data is saved in this format
+`viewfs:///platform/italk/wholelog/svc_code=tour/year=2018/month=01/day=30`
+
+the tour log looks like
+
+```
+
+[Row(service='italk', 
+room_id=None, 
+user=None, 
+channel={
+    'disp_id': 'overseas_air', v
+    'disp_nm': '해외항공/공통',
+    'disp_no': '9100'
+    
+},
+message={
+    'type': 'commit',
+    'msg_list': '[{
+        "type":"text",
+        "body":"항공기 탑승이나 수화물 등 공항서비스 관련 궁금한 사항을 선택해주세요~\\r\\n"}]'
+    
+},
+
+writer={
+    'user_id': 'tour',
+    'app_os': '',
+    'app_ver': '',
+    'user_nm': 'alfred',
+    'mem_no': '1',
+    'user_tp': 'system', 
+    'app_id': 'tour'
+    
+}, 
+
+room={
+    'jobseq': '395265',
+    'id': 'c914a60c',
+    'status': 'auto'
+    
+},
+
+zipsa=None,
+
+logdate={
+    'date': '2018-01-03',
+    'time': '00:17:52',
+    'ts': '1514906272'
+    
+}, 
+
+hour='00',
+timestamp='1514906272',
+logtype='message')]
+"""
+
+# room.status means
+"""
+    'auto'        : '자동대화', // 10
+    'no-zipsa'    : '분배대기', // 14
+    'night'       : '야간상담', // 15
+    'wait'        : '미응대',  // 19
+    'ing'         : '대화중',  // 20
+    'holding'     : '응대대기', // 30
+    'no-answer'   : '무응답',  // 31
+    'end-passive' : '대화종료', // 40
+    'giveup'      : '대화포기', // 41
+    'end-auto'    : '자동종료', // 42
+    'transfer'    : '대화이관'  // 50
+"""
+
+
+# how to get a average waittime
+"""
+room={
+    'jobseq': '395265',
+    'id': 'c914a60c',
+    'status': 'auto'
+    
+},
+
+zipsa=None,
+
+logdate={
+    'date': '2018-01-03',
+    'time': '00:17:52',
+    'ts': '1514906272'
+    
+}, 
+```
+
+
+
+
+## 1.  get count of each consulting
+
+in chatbot, each message is saving in log and have a unique id in counsult. it has  `timestamp` value, so we can get a count and average wait time.
+
+```
+from pyspark.sql.types import *
+from pyspark.sql import functions as F
+from pyspark.storagelevel import StorageLevel
+from datetime import datetime, timedelta
+import calendar
+from datetime import date
+from pyspark import SparkConf, SparkContext
+
+
+yesterday = datetime.now() + timedelta(days=-1)
+
+def getLeadZeroFormat(no):
+	"""
+	for formatting sql date form
+	"""
+    return (lambda x: '0'+str(x) if x < 10 else str(x))(no)
+    
+sample_path = "".join(["viewfs:///platform/italk/wholelog/svc_code=tour/","year=",str(yesterday.year),"/month=",getLeadZeroFormat(yesterday.month),"/day=",getLeadZeroFormat(yesterday.day)])
+
+def getDayLogPath(year, month, day) :
+	
+    path = "".join(["viewfs:///platform/italk/wholelog/svc_code=tour/","year=",str(year),"/month=",getLeadZeroFormat(month),"/day=",getLeadZeroFormat(day)])
+    return path
+
+def getMonthLogPath(y, m) :
+    pathList = []
+    month = date(y, m, 1)
+    last_day_of_month = calendar.monthrange(y, m)[1]
+    
+    for i in range(1, last_day_of_month+1) :
+        day_path = getDayLogPath(y, m, i)
+        pathList.append(day_path)
+        
+    return pathList
+```
+
+setup a boilerplate code first, and from now on let's get yesterday's log from hadoop.
+
+```
+from pyspark.sql.types import *
+from pyspark.sql import functions as F
+from pyspark.storagelevel import StorageLevel
+from datetime import datetime, timedelta
+
+yesterday = datetime.now() + timedelta(days=-1)
+
+target_path = "".join(["viewfs:///platform/italk/wholelog/svc_code=tour/","year=",str(yesterday.year),"/month=",getLeadZeroFormat(yesterday.month),"/day=",getLeadZeroFormat(yesterday.day)])
+
+df = spark.read.parquet(target_path)
+
+raw = df.select(
+    df.channel.disp_id.alias('disp_id'), 
+    df.channel.disp_nm.alias("disp_nm"),
+    df.message.msg_list.alias("message"),
+    F.concat_ws('-', df.logdate.date, df.room.id, df.room.jobseq).alias('msg_idx'), # from pyspark.sql import functions as F
+    df.room.status.alias('status'), 
+    df.writer.user_tp.alias("user_type"),
+    df.writer.user_age.alias("user_age"),
+    df.writer.app_os.alias('app_os'), 
+    df.writer.user_id.alias('user_id'),
+    df.writer.user_nm.alias('user_nm'),
+    df.logdate.date.alias('date'),
+    df.hour.alias('hour'),
+    df.timestamp.alias('ts')
+)
+
+raw.persist(StorageLevel.MEMORY_ONLY_SER)
+
+raw = raw.filter(raw.user_age != "00") #
+raw.show()
+```
+
+if you use `.collect()` always, it can cause performance degradation. so you shouldn't use the `.collect()` much.
+
+from this data, now we can get a max and min time for waiting.
+
+```
+def pickmax(x,y):
+    if x['timestamp'] > y['timestamp']:
+        return x
+    else:
+        return y
+    
+def pickmin(x,y):
+    if x['timestamp'] < y['timestamp']:
+        return x
+    else:
+        return y
+
+def pickauto(raw) :
+    raw.filter(raw.status == "auto")
+    return raw
+    
+autordd = pickauto(raw)
+print(autordd)
+"""
+DataFrame[disp_id: string, disp_nm: string, message: string, msg_idx: string, status: string, user_type: string, user_age: string, app_os: string, user_id: string, user_nm: string, date: string, hour: string, ts: string]
+"""        
+                
+max_auto = raw.filter(raw.status == 'auto') \
+    .rdd.map(lambda x: (x['msg_idx'], {
+        'disp_id' : x['disp_id'], 
+        'app_os' : x['app_os'], 
+        'user_age' : x['user_age'],
+        'date' : x['date'], 
+        'hour' : int(x['hour']), 
+        'timestamp' : int(x['ts'])
+    })).reduceByKey(pickmax)
+
+max_auto.unpersist()
+max_auto.persist(StorageLevel.MEMORY_ONLY_SER)
+
+min_auto = raw.filter(raw.status == 'auto') \
+    .rdd.map(lambda x: (x['msg_idx'], {
+        'disp_id' : x['disp_id'], 
+        'app_os' : x['app_os'], 
+        'user_age' : x['user_age'],
+        'date' : x['date'], 
+        'hour' : int(x['hour']), 
+        'timestamp' : int(x['ts'])
+    })).reduceByKey(pickmin)
+    
+min_auto.unpersist()
+min_auto.persist(StorageLevel.MEMORY_ONLY_SER)
+
+max_wait = raw.filter(raw.status == 'wait') \
+    .rdd.map(lambda x: (x['msg_idx'], {
+        'disp_id' : x['disp_id'], 
+        'app_os' : x['app_os'], 
+        'user_age' : x['user_age'],
+        'date' : x['date'], 
+        'hour' : int(x['hour']), 
+        'timestamp' : int(x['ts'])
+    })).reduceByKey(pickmax)
+    
+max_wait.unpersist()
+max_wait.persist(StorageLevel.MEMORY_ONLY_SER)
+
+min_wait =  raw.filter(raw.status == 'wait') \
+    .rdd.map(lambda x: (x['msg_idx'], {
+        'disp_id' : x['disp_id'], 
+        'app_os' : x['app_os'], 
+        'user_age' : x['user_age'],
+        'date' : x['date'], 
+        'hour' : int(x['hour']), 
+        'timestamp' : int(x['ts'])
+    })).reduceByKey(pickmin)
+    
+min_wait.unpersist()
+min_wait.persist(StorageLevel.MEMORY_ONLY_SER)
+
+max_ing = raw.filter(raw.status == 'ing') \
+    .rdd.map(lambda x: (x['msg_idx'], {
+        'disp_id' : x['disp_id'], 
+        'app_os' : x['app_os'], 
+        'user_age' : x['user_age'],
+        'date' : x['date'], 
+        'hour' : int(x['hour']), 
+        'timestamp' : int(x['ts'])
+    })).reduceByKey(pickmax)
+    
+max_ing.unpersist()
+max_ing.persist(StorageLevel.MEMORY_ONLY_SER)
+
+min_ing = raw.filter(raw.status == 'ing') \
+    .rdd.map(lambda x: (x['msg_idx'], {
+        'disp_id' : x['disp_id'], 
+        'app_os' : x['app_os'], 
+        'user_age' : x['user_age'],
+        'date' : x['date'], 
+        'hour' : int(x['hour']), 
+        'timestamp' : int(x['ts'])
+    })).reduceByKey(pickmin)
+    
+min_ing.unpersist()
+min_ing.persist(StorageLevel.MEMORY_ONLY_SER)
+
+max_night = raw.filter(raw.status == 'night') \
+    .rdd.map(lambda x: (x['msg_idx'], {
+        'disp_id' : x['disp_id'], 
+        'app_os' : x['app_os'], 
+        'user_age' : x['user_age'],
+        'date' : x['date'], 
+        'hour' : int(x['hour']), 
+        'timestamp' : int(x['ts'])
+    })).reduceByKey(pickmax)
+    
+max_night.unpersist()
+max_night.persist(StorageLevel.MEMORY_ONLY_SER)
+
+min_night = raw.filter(raw.status == 'night') \
+    .rdd.map(lambda x: (x['msg_idx'], {
+        'disp_id' : x['disp_id'], 
+        'app_os' : x['app_os'], 
+        'user_age' : x['user_age'],
+        'date' : x['date'], 
+        'hour' : int(x['hour']), 
+        'timestamp' : int(x['ts'])
+    })).reduceByKey(pickmin)
+    
+min_night.unpersist()
+min_night.persist(StorageLevel.MEMORY_ONLY_SER)
+
+max_giveup = raw.filter(raw.status == 'giveup') \
+    .rdd.map(lambda x: (x['msg_idx'], {
+        'disp_id' : x['disp_id'], 
+        'app_os' : x['app_os'], 
+        'user_age' : x['user_age'],
+        'date' : x['date'], 
+        'hour' : int(x['hour']), 
+        'timestamp' : int(x['ts'])
+    })).reduceByKey(pickmax)
+    
+max_giveup.unpersist()
+max_giveup.persist(StorageLevel.MEMORY_ONLY_SER)
+
+min_giveup = raw.filter(raw.status == 'giveup') \
+    .rdd.map(lambda x: (x['msg_idx'], {
+        'disp_id' : x['disp_id'], 
+        'app_os' : x['app_os'], 
+        'user_age' : x['user_age'],
+        'date' : x['date'], 
+        'hour' : int(x['hour']), 
+        'timestamp' : int(x['ts'])
+    })).reduceByKey(pickmin)
+```
+
+after this, we can make a temp view to get things from sql.
+to make a table, you can code it like
+
+```
+def getDiffTs(val):
+    x = val[1]
+    y = x[0]
+    z = x[1]
+    
+    dp = y['disp_id']
+    if y['disp_id'] == 'common':
+        dp = z['disp_id']
+
+    a = int(y['timestamp'])
+    b = int(z['timestamp'])
+    
+    date_a = datetime.fromtimestamp(a)
+    date_b = datetime.fromtimestamp(b)
+    
+    if a >= b:
+        diff = date_a-date_b
+    else:
+        diff = date_b-date_a
+    return [val[0], dp, z['app_os'], z['user_age'], z['date'], z['hour'], int(diff.total_seconds())]
+ 
+autoToIng = max_auto.join(min_ing).map(getDiffTs)
+
+joins_df = spark.createDataFrame(autoToIng, ["msg_idx","disp_id","app_os", "user_age", "date","hour","waitsec"])
+print(joins_df.take(1))
+
+joins_df.createOrReplaceTempView("test")
+```
+
+you can check the table view from code `
+joins_df.createOrReplaceTempView("test")`
+
+Let's count yesterday's all log in specific  condition.
+
+```
+
+from pyspark.sql.functions import countDistinct
+
+
+ing =raw.filter(raw.status=="ing").select("msg_idx").distinct().count()
+no_answer = raw.filter(raw.status == 'no-answer').select("msg_idx").distinct().count()
+holding = raw.filter(raw.status == 'holding').select("msg_idx").distinct().count()
+
+notEndedYetCount = ing+no_answer+holding
+print("notEndedYetCount", notEndedYetCount)
+
+giveup = raw.filter(raw.status == "giveup").select("msg_idx").distinct().count()
+end_passive = raw.filter(raw.status == "end-passive").select("msg_idx").distinct().count()
+distributedCount = notEndedYetCount + giveup+end_passive
+print("distributedCount", distributedCount)
+
+no_zipsa = raw.filter(raw.status == "no-zipsa").select("msg_idx").distinct()
+print("no_zipsa", no_zipsa.count())
+wait= raw.filter(raw.status == "wait").select("msg_idx").distinct()
+print("wait", wait.count())
+manualCount = no_zipsa.count() + wait.count() + distributedCount
+print("manualCount", manualCount)
+
+end_auto =  raw.filter(raw.status == "end-auto").count()
+
+autoCount = giveup+ end_auto
+print("autoCount", autoCount)
+
+
+todayCount = autoCount+manualCount
+print("todayCount", todayCount)
+
+
+responseRate = distributedCount/manualCount
+print("responseRate", round(responseRate*100, 3), "%")
+```
+
+
+the result seems like
+
+```
+notEndedYetCount 572
+distributedCount 594
+no_zipsa 93
+wait 466
+manualCount 1153
+autoCount 22
+todayCount 1175
+responseRate 51.518 %
+```
+
+##  2.  Count user diversity
+
+shame for me, i count a foriegn user for who's name includes alphabet.
+but in korea, almost 100% of Korean people use korean for their name.
+
+when i checked for result, all non-korean name user was foreigners.
+
+```
+import re
+internationalUser = raw.filter(raw.user_nm.rlike("[^\W_]")) 
+
+internationalUserCount = internationalUser.count()
+wholeUserCount = raw.count()
+domesticUserCount = wholeUserCount - internationalUserCount
+
+
+internationalUserRate = internationalUserCount/wholeUserCount
+print("internationalUserRate", round(internationalUserRate*100, 3), "%")
+
+print("internationalUserCount", internationalUserCount)
+print("domesticUserCount", domesticUserCount) 
+```
+
+the result was like this.
+
+```
+internationalUserRate 2.624 %
+internationalUserCount 312
+domesticUserCount 11579
+```
+
+## 3. get most busy hour
+
+
+```
+hourlyRaw =raw.select("hour").rdd
+
+hourlyRawCounts = hourlyRaw.map(lambda hour : (hour, 1)).reduceByKey(lambda a, b : a+b)
+hourlySorted = hourlyRawCounts.map(lambda x : (x[1], x[0])).sortByKey()
+results = hourlySorted.collect()
+
+for x in results :
+    count = x[0]
+    hour = x[1]
+    
+    if(hour) :
+        print(hour, ": ", count, "회")
+```
+
+am 9-11 was extremely busy in korean utc.
+
+```
+Row(hour='04') :  4 회
+Row(hour='05') :  18 회
+Row(hour='02') :  35 회
+Row(hour='07') :  39 회
+Row(hour='03') :  43 회
+Row(hour='00') :  72 회
+Row(hour='06') :  76 회
+Row(hour='01') :  80 회
+Row(hour='21') :  150 회
+Row(hour='08') :  171 회
+Row(hour='19') :  195 회
+Row(hour='20') :  215 회
+Row(hour='23') :  238 회
+Row(hour='22') :  265 회
+Row(hour='18') :  339 회
+Row(hour='17') :  581 회
+Row(hour='12') :  889 회
+Row(hour='14') :  1056 회
+Row(hour='13') :  1071 회
+Row(hour='16') :  1177 회
+Row(hour='11') :  1194 회
+Row(hour='10') :  1267 회
+Row(hour='15') :  1317 회
+Row(hour='09') :  1399 회
+```
+
+## 4. use nlp
+
+```
+from konlpy.tag import Twitter
+import sys
+import operator
+from collections import Counter
+
+from pyspark.sql.types import StringType
+
+placeRaw = raw.select("disp_nm")
+```
+
+i do want to get the percentage of domestic and international chats in bot.
+
+```
+from konlpy.tag import Twitter
+import sys
+import operator
+from collections import Counter
+
+from pyspark.sql.types import StringType
+
+placeRaw = raw.select("disp_nm")
+
+collectedRaw = placeRaw.rdd.map(lambda x : (x,1)).reduceByKey(operator.add).map(lambda x : ["국내" if ("국내" in x[0].disp_nm) else "해외", x])
+
+
+
+placeCount = collectedRaw.countByKey()
+print(placeCount)
+```
+
+i know the `placeRaw.rdd.map(lambda x : (x,1)).reduceByKey(operator.add).map(lambda x : ["국내" if ("국내" in x[0].disp_nm) else "해외", x])` code seems complicated, but it's just a key and value calculation.
+
+countByKey() returns  defaultdict and it looks like `defaultdict(<class 'int'>, {'해외': 49, '국내': 5})`  -> domestic for 5 and international for 49.
+
+now i want to check which country is most famous for tour app.
+
+```
+from konlpy.tag import Kkma
+from konlpy.utils import pprint
+from konlpy.tag import Twitter
+
+
+def get_tags(text, ntags=100) :
+    
+    kkma = Kkma()
+    twitter = Twitter() 
+    return_list = []
+    
+    nouns = twitter.nouns(text)
+    count = Counter(nouns)
+    
+    for n, c in count.most_common(ntags):
+        temp = {'tag': n, 'count': c}
+        return_list.append(temp)
+    return return_list
+
+
+internationalRaw = placeRaw.rdd.map(lambda x : (x,1)).filter(lambda x : ~("국내" in x[0].disp_nm))
+
+
+placeKeys = internationalRaw.keys().keys().collect()
+text = "".join(placeKeys)
+
+tags = get_tags(text)
+
+
+reduceText = "해외, 항공, 공통, 해외여행, 실시간, 임박, 호텔, 숙박, 담당, 기타, 팀, 지역, 패키지, 출발, 자유, 만들기, 현지, 긴급, 일, 법인, 단체, 나라"
+reduceArray = reduceText.split(", ")
+
+for tag in tags:
+    noun = tag['tag']
+    count = tag['count']
+    
+    if noun not in reduceArray :
+        print('{} {}'.format(noun, count))   
+
+```
+
+the result is like 
+
+```
+동남아 1139
+일본 1080
+유럽 666
+미주 535
+일본국 278
+대양주 184
+중국 136
+필리핀 79
+북부 47
+.. etc
+```
+
+the whole process tooks about 3.45mins
+
+## further Fixes
+
+1. I should do word classification with python library. I'm still newbie at nlp.
+2. i can use pandas than spark for speed. or i can think consider about cython.
+
+---
+
 # spark 분석 적용하기 ~ 톡집사 투어 로그 ~
 
 여태 공부한 spark를 실제 업무에 적용해 보도록 하겠다. 간단한 예로 톡집사 투어 로그를 분석해보겠다.
