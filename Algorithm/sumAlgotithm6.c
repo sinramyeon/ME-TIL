@@ -4,7 +4,7 @@
 
 main(){
 
-  int i, j, k L;
+  int i, j, k, L;
 
   i = 0;
   j = 1;
@@ -14,9 +14,9 @@ main(){
   do{
 
     i++;
-    j = j+i;
+    j = j+i; // 1+1
     L = L*-1; // -1*-1 = 1
-    k = k+ (j*L)
+    k = k+ (j*L) // -1 + 2
   
   }while(i<19);
 
