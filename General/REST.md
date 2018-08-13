@@ -1,6 +1,6 @@
 # REST
 
-OpenAPI와 함꼐 떠오른 REST API(RestFul) 도대체 근데 이게 뭐라고 설명을 해야 할까.
+OpenAPI와 함께 떠오른 REST API(RestFul) 도대체 근데 이게 뭐라고 설명을 해야 할까.
 
 ## REPRESENTATIONAL STATE TRANSFER
 
@@ -14,7 +14,7 @@ REST를 개발하고 써놓고 사실 REST 가 뭐냐 하면 어~그 RestFul한 
 - 행위(Verb) - HTTP METHOD
 - 표현(Representations)
 
-REST는 제어할 자원을 표시한 `URI` 로 수행할 행위인 `HTTP Method` 를 보내어 그 결과를 `표현` 한다. 뭔소리냐면 보내고싶은 잘를 URL라고 하고 그걸 HTTP method를 통해 보내고 결과는 틀에 맞춰서 보여준다는 뜻이다.
+REST는 제어할 자원을 표시한 `URI` 로 수행할 행위인 `HTTP Method` 를 보내어 그 결과를 `표현` 한다. 뭔소리냐면 보내고싶은 자료를 URI라고 하고 그걸 HTTP method를 통해 보내고 결과는 틀에 맞춰서 보여준다는 뜻이다.
 
 ### URI
 
@@ -22,7 +22,7 @@ REST는 제어할 자원을 표시한 `URI` 로 수행할 행위인 `HTTP Method
 
 통합 자원 식별자(Uniform Resource Identifier, URI)는 인터넷에 있는 자원을 나타내는 유일한 주소이다. URI의 존재는 인터넷에서 요구되는 기본조건으로서 인터넷 프로토콜에 항상 붙어 다닌다.
 
-...가 정의인데, 대강 URI 가 뭐냐면 유일한 자원 주소이다. html이던 뭐던.. 딱 하나 있는 자료이다. URL하고 뭐가 다르냐면 URL은 `Uniform Resource Locator`고 URI는 *Identifier*이다. URL이 URI 하위개념이라고 보면 된다.
+...가 정의인데, 대강 URI 가 뭐냐면 유일한 자원 주소이다. html이던 뭐던.. 딱 하나 있는 자료이다. naver.com/webtoon/hello/1.html 같은 것들을 URI라고 한다. URL하고 뭐가 다르냐면 URL은 `Uniform Resource Locator`고 URI는 *Identifier*이다. URL이 URI 하위개념이라고 보면 된다.
 
 REST에서는 URI는 반드시 자원을 가리켜야한다. 그러니까 예를 들어 `post/delete/1`로 1번 글을 지우는 REST API를 생각해 보자.
 
