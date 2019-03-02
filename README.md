@@ -19,7 +19,7 @@
 - [Go](#Go) Golang
 - [Java](#Java) 자바!
 - [SQL](#SQL) 사내 SQL 스터디 일지
-- [MakeGame](#MakeGame) 게임 만들기
+- [5MonthsWarrior](#5MonthsWarrior) 프로베짜이트에 통과하기 위해 6월까지 달립니다.
 <hr/>
 
 ##### 9XD의 [milloy](https://github.com/milooy/TIL)님께 영감을 받아 시작했습니다.
