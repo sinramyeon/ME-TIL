@@ -35,3 +35,8 @@ func quickSortUtil(arr []int, lower int, upper int, comp func(int, int) bool) {
 func swap(arr []int, first int, second int) {
   arr[first], arr[second] = arr[second], arr[first]
 }
+
+// 언제쓰는가
+// stable sort 가 필요할때
+// 최악을 피한 평균 퍼포먼스를 찾을때
+// 데이터가 랜덤일때
