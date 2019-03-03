@@ -18,3 +18,7 @@ func SelectionSort(arr []int) {
   }
 
 }
+
+
+// best wort average case!!!
+// 프로토 타입 등에나 유효하지 가장 쓸모가 없음.
