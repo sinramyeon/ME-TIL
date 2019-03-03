@@ -12,3 +12,5 @@ func BubbleSort(arr []int, comp func(int, int) bool) {
   }
 }
 
+// 이미 거의 정렬된 데이터에 유효함
+// 예를들어 데이터 한쌍만 정렬이 안됐다거나
