@@ -14,3 +14,7 @@ func InsertionSort(arr []int, comp func(int, int) bool) {
   // arr[0] = temp
  }
 }
+
+// 언제씀
+// 안정된 정렬방법
+// 미리 정렬된 데이터 등에도 유용함.
