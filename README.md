@@ -7,18 +7,18 @@
 ## Contents
 
 - [General](#General) 개발일반상식
-- [Web_frontend](#Web_frontend) 프론트엔드 상식
-- [Web_backend](#Web_backend) 백엔드 상식
-- [Server](#Server) 서버 상식
-- [SystemOS](#SystemOS) 리눅스와 함께하기
-- [Tool](#Tool) 다양한 툴 활용기
-- [Git](#Git) Git
-- [Docker](#Docker) Docker
-- [Python](#Python) 파이썬!
-- [Algorithm](#Algorithm) 파이썬으로 알고리즘 풀기
-- [Go](#Go) Golang
-- [Java](#Java) 자바!
-- [SQL](#SQL) 사내 SQL 스터디 일지
+- [Web_frontend](#Web_frontend)
+- [Web_backend](#Web_backend)
+- [Server](#Server)
+- [SystemOS](#SystemOS)
+- [Tool](#Tool)
+- [Git](#Git)
+- [Docker](#Docker)
+- [Python](#Python)
+- [Algorithm](#Algorithm) 다양한 언어로 알고리즘 풀기
+- [Go](#Go)
+- [Java](#Java)
+- [SQL](#SQL)
 - [5MonthsWarrior](#5MonthsWarrior) 프로베짜이트에 통과하기 위해 6월까지 달립니다. 20190203~
 <hr/>
 
