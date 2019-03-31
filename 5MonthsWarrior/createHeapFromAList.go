@@ -65,3 +65,15 @@ func (h *Heap) Peek() (int, bool) {
       }
       return h.arr[1], true
 }
+
+func (h *Heap) proclateUp(child int) {
+  parent := child/2
+  if parent == 0{
+    return
+  }
+  
+  if h.comp(parent, child) {
+    h.swap(chlid, parent)
+    h.proclateUp(parent)
+  }
+}
