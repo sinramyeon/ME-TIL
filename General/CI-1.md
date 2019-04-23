@@ -50,3 +50,17 @@ Maven, Gradle, Ant
 #### 테스트 툴
 Junit, Mocha
 
+---
+
+# GITLAB CI 설치하기
+
+사실 설치에 대해서는 [공식 문서]([https://docs.gitlab.com/runner/install/](https://docs.gitlab.com/runner/install/)) 나 많은 선배님들의 블로그 [올라운드플레이어 님의 블로그]([https://allroundplaying.tistory.com/21](https://allroundplaying.tistory.com/21)) 에 너무 설명이 잘 되어 있어서 그닥 설명할 게 없는 느낌이 든다. 특히 **올라운드플레이어** 님 블로그만 봐도 눈을 감고도 설치할 수 있는 단순함마저 보인다.
+
+### Gitlab CI runner 란?
+
+GITLAB CI 에는 Gitlab CI Runner 란 것이 있는데, 이 러너란 놈을 깔면 우리가 하라고 한 걸 하고 그 결과를 깃랩 서버에 전달해 준다. 즉 이 Gitlab CI Runner 를 CI 서버로 쓸 곳에 계속 실행시켜 놓고 CI/CD를 이어나간다고 생각하면 된다.
+
+# GITLAB CI 설정하기
+
+사실 gitlab runner 설치 자체는 단순하다. gitlab 내에서 CI 관련 설정을 하는 것이 더욱 복잡하게 느껴질 수 있다.
+
