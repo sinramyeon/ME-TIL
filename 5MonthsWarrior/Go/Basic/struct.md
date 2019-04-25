@@ -149,3 +149,102 @@ func ExampleContact(){
   c.Direct = "N/A"
 }
 ```
+
+직렬화 serialization 이란 객체의 상태를 보관이나 전송가능한 상태로 바꾸는 것이다.
+반대로 보관되거나 전송받은걸 다시 객체로 바꾸는걸 역직렬화 deserialization이라고 한다.
+
+대표적 예제의 json을 보자.
+
+```
+func Example_marshalJSON() {
+	t := Task{
+		"Laundry",
+		Done,
+		NewDeadline(time.Date(2015, time.August, 16, 15, 43, 0, 0, time.UTC))
+		
+		b, err := json.Marshal(t)
+		
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		
+		fmt.Println(string(b))
+	}
+}
+
+func Example_unmarshalJSON() {
+	b := []byte{`{"Title" : "Buy Milk"}`}
+	t := Task{}
+	err := json.Unmarshal(b, &t)
+	
+	if err != nil {
+		return
+	}
+	
+	fmt.Println(t.Title)
+}
+```
+
+위와 같이 직렬화/역직렬화가 가능하고 json 태그를 붙여 구조체의 필드 이름과 json의 필드 이름을 다르게 할 수도 있다.
+
+
+```
+type MyStruct struct {
+	Title string `json:"title"`
+	Internal string `json:"-"`
+	Value int64 `json:",omitempty"`
+	ID int64 `json:",string"`
+}
+```
+
+omitempty에서는 ->	Value int64 `json:",omitempty"` 에서 값이 0이면 json 결과를 내지 않는다.
+,string의 id에서는 64비트정수를 10진수 문자열로 바꿔서 전달한다. 자바스크립트에서 숫자형은 8바이트 실수형이기 때문에 정수값이 53비트를 넘어서면 정확도가 떨어지기 때문이다. (낮은자리 숫자들이 0으로 바뀜)
+
+---
+
+Gob
+
+go언어 직렬화는 gob 이 있는데 go언어에서만 읽고 쓸 수 있다.
+
+```
+func Example_gob() {
+	var b bytes.Buffer
+	enc := gob.NewEncoer(&b)
+	data := map[string]string{"N":"J"}
+	
+	if err := enc.Encode(data); err != nil {
+		fmt.Println(err)
+	}
+	
+	const width = 16
+	
+	for start := 0; start < len(b.Bytes()); start += width {
+		end := start + width
+		if end > len(b.Bytes()) {
+			end = len(b.Bytes())
+		}	
+	}
+	
+	dec := gob.NewDecoder(&b)
+	var restored map[string]string
+	if err := dec.Decode(&restored); err != nil {
+		fmt.Println(err)
+	}
+	
+}
+```
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
