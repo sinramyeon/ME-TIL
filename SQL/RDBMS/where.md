@@ -31,3 +31,29 @@ NULL값을 0 으로 치환할 때 많이 사용
 
 - ZEROIFNULL(열이름) 해당 열에 NULL값이 포함되면 숫자 0으로 바꾸는 함수
 - NVL2(열 이름, 표현식1, 표현식2) 해당 열이 NULL이면 표현식 2로 나타냄
+
+---
+
+
+### 논리연산자
+
+AND 연산자
+교집합
+> SELECT 열 이름1, 열 이름2 FROM 테이블명 WHERE 조건절 AND 조건절
+
+OR 연산자
+합집합
+> SELECT 열 이름1, 열 이름 2 FROM 테이블명 WHERE 조건절1 OR 조건절2
+
+*우선순위는 OR연산자보다 AND연산자가 더 앞선다*
+
+IN 연산자
+> SELECT 열 이름 FROM 테이블명 WHERE 비교할 열 이름 IN (조건1, 조건2);
+IN연산자는 여러 조건 중 하나만 만족해도 출력
+
+NOT IN
+> SELECT 열 이름 FROM 테이블명 WHERE 비교할 열 이름 NOT IN (조건, 조건2)
+
+*IN이 OR보다 빠르다.*
+*IN 연산자 안에 다른 SELECT문장을 사용할 수 있다*
+
