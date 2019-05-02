@@ -1,3 +1,4 @@
+
 # 동시성
 
 ## 고루틴
@@ -138,8 +139,114 @@ var chan<- int c4 = c1 // 보내기 전용
 
 ### 일대일 단방향
 
+한쪽에서 보내고 한쪽에서 받는 형태
+
 ```
 funcExample_simpleChannel() {
-	
+	c := make(chan int)
+	go func() {
+	c<-1
+	c<-2
+	c<-3
+}()
+
+fmt.Println(<-c)
+fmt.Println(<-c)
+fmt.Println(<-c)
+
+//혹은
+c := make(chan int)
+	go func() {
+	c<-1
+	c<-2
+	c<-3
+	close(c)
+}()
+for num := range c{
+	fmt.Println(num)
 }
+}
+
+// 더 깔끔히
+
+c := func() <- chan int {
+	c:=make(chan int)
+	go func() {
+	defer close(c)
+	c<-1
+	c<-2
+	c<-3
+}()
+return c
+}()
+for num := range c{
+	fmt.Println(num)
+}
+}
+```
+
+### 생성기 패턴
+
+```
+func Fibonacci(max int) <-chan int {
+
+	c := make(chan int)
+	go func(){
+	a, b := 0, 1
+	for a<= max {
+	c<-a
+	a, b = b, a+b
+	}	
+	}()
+	return c
+}
+
+func ExampleFibo(){
+	for fib := range Fibonacci(15){
+		fmt.Println(fib)
+	}
+	// 0 1 1 2 3 5 8 13..
+}
+```
+
+클로저를 이용한 패턴
+
+```
+func FibonacciGen(max int) func() int {
+	next, a, b := 0, 0, 1
+	return func() int {
+		next, a, b = a, b, a+b
+		if next > max{
+			return -1
+		}
+		return next
+	}
+}
+```
+
+채널을 이용하는 방법의 장점
+
+1 생성하는 쪽에서 상태 저장 방법을 고민할 필요가 없음
+2 받는 쪽에서 for range 이용 가능
+3 멀티코어 활용 가능, 입출력 성능 장점 가능
+
+### 버퍼 있는 채널
+
+> c:= make(chan int, 10)
+> 버퍼의 크기가 10인 정수 채널
+
+채널에 버퍼가 있으면 버퍼가 찰 때 까지 계속 집어넣을 수 있음
+
+### 닫힌 채널
+
+> val, ok := <-c
+> ok에 채널이 열렸는지/닫혔는지 여부가 들어옴
+
+```
+c := make(chan int)
+close(c) // 채널을 닫음
+
+<-c // 0
+<=c // 0
+...
 ```
