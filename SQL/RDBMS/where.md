@@ -22,7 +22,7 @@ IS NOT NULL | NULL값이 아님
 COALESCE 함수 문법
 
 ** COALESCE ˌkəʊəˈles**  (더 큰 덩어리로) 합치다
-
+             ㅋ ㅏ ㅡㄹ 레스
 `COALESCE(EXPRESSION 1, EXPRESSION 2, ... , EXPRESSION N)`
 
 EXPRESS1이 NULL이 아니면 EXPRESSION 1을 리턴하고 아니면 2.. 순서로 리턴하는 함수.
