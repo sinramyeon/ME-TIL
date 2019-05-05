@@ -250,3 +250,82 @@ close(c) // 채널을 닫음
 <=c // 0
 ...
 ```
+
+---
+
+### 동시성 패턴
+(도대체뭔소리임)
+#### 파이프라인 패턴
+
+생성기 패턴과 동일하게 받기 전용 채널을 반환
+받기 전용 채널을 넘겨받아 입력으로 활용
+
+```
+func PlusOne(in <-chan int) <-chan int {
+//	 받는 채널을 입력으로 받고, 돌려주는 채널을 리턴
+
+out := make(chan int)
+go func(){
+
+	defer close(out)
+	for num := range in {
+	out <- num+1
+	}
+}()
+
+return out
+}
+
+func ExamplePlusOne(){
+
+	c := make(chan int)
+	go func(){
+	defer close(c)
+	c <-5
+	c <- 3
+	c <- 8
+	}()
+
+	for num := range PlusOne(PlusOne(c)){
+	fmt.Println(num)
+}
+
+}
+```
+
+```
+func Chain(ps ...IntPipe) {
+	return func(in <-chan int) <-chan int {
+	c := in
+	for _, p:= range ps {
+	c = p(c)
+	}
+	return c
+}
+}
+```
+
+#### 팬 인
+
+```
+func FanIn(ins ..<-chan int) <-chan int {
+	out := make(chan int)
+	var wg sync.WaitGroup
+	wg.Add(len(ins))
+	for _, in := range ins {
+		go func(in <-chan int) {
+		defer wg.Done()
+		for num := range in {
+		out <- num
+		}
+		}(in)
+	}
+go func() {
+wg.Wait()
+close(out)
+}()
+
+return out
+}
+```
+
