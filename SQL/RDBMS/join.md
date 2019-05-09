@@ -64,4 +64,27 @@ ON 별칭1.KEY = 별칭2.KEY
 
 FULL OUTER JOIN 키워드는 왼쪽과 오른쪽의 모든 행이 반환됨(LEFT+RIGHT JOIN)
 
+## 행 합치기
+
+```
+SELECT 열 이름 1, 열 이름 2 FROM 테이블명1 WHERE 조건절
+UNION
+SELECT 열 이름 1, 열 이름 2 FROM 테이블명2 WHERE 조건절
+OREDR BY 1
+```
+
+1. UNION문으로 합쳐지는 SELECT 열의 숫자는 반드시 동일해야 한다.
+2. 각 데이터 타입이 일치해야 한다.
+3. 중복된 값이 있으면 한 가지만 표시된다.
+
+```
+SELECT 열 이름 1, 열 이름 2 FROM 테이블명1 WHERE 조건절
+UNION ALL
+SELECT 열 이름 1, 열 이름 2 FROM 테이블명2 WHERE 조건절
+ORDER BY 1
+```
+
+UNION ALL은 중복을 포함한 모든 값을 나타낸다.
+
+
 
