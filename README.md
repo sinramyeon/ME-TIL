@@ -23,13 +23,13 @@
 - [Cpp](#Cpp)
 - [5MonthsWarrior](#5MonthsWarrior) 프로베짜이트에 통과하기 위해 6월까지 달립니다. 20190203~
   - [Go](#Go)
-    - [DS/Algo](#DS/Algo)
-    - [Basic](#Basic)
-    - [Web](#Web)
+    - [DS/Algo](#DS/Algo) 고 알고리즘과 자료구조
+    - [Basic](#Basic) 디스커버리 고
+    - [Web](#Web) 고 웹개발
   - [Python](#Python)
-    - [DS/Algo](#DS/Algo)
+    - [DS/Algo](#DS/Algo) 파이썬 알고리즘
     - [Basic](#Basic)
-    - [Web](#Web)
+    - [Web](#Web) 파이썬 장고 백엔드
 <hr/>
 
 #### 9XD의 [milloy](https://github.com/milooy/TIL)님께 영감을 받아 시작했습니다.
