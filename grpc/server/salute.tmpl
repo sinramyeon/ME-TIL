@@ -1,0 +1,86 @@
+{{define "salute"}}
+<html>
+<head>
+    <style>
+        img.logo {
+            float: left;
+            width: 50px;
+        }
+
+        body {
+            background-color: #111;
+            color: white;
+            font-family: Verdana;
+            width: 90%;
+            text-align: right;
+        }
+
+        .desc {
+            vertical-align: text-top;
+            float: left;
+            width: 500px;
+        }
+
+        a {
+            color: lightgray;
+        }
+
+        .title {
+            margin: 10px;
+            display: block;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .sub {
+            margin: 10px;
+            color: lightpink;
+            display: block;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        div.video {
+            margin: 20px;
+            float: left;
+        }
+
+        .clear-all {
+            all: initial;
+            font-family: Verdana;
+        }
+
+    </style>
+    <title>We Salute {{.Salutee}}!</title>
+</head>
+<body>
+
+<div class="body" >
+    <div class="header">
+        <img class="logo" src="{{.LogoUrl}}">
+        <div class="date">{{timestamp}}</div>
+    </div>
+    <div class="desc">
+        <div class="title">
+            {{join .Saluters}} Salutes
+            <i><strong style="color: deeppink">{{.Salutee}}</strong></i>
+        </div>
+        <div class="sub">
+            {{.Description}}
+            <p class="clear-all">
+                <a href="{{.Url}}">Read
+                    more...
+                </a>
+            </p>
+
+        </div>
+    </div>
+    <div class="video">
+        <iframe width="560" height="315" src="{{.VideoUrl}}" frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+        </iframe>
+    </div>
+</div>
+</html>
+{{end}}
