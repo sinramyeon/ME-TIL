@@ -22,3 +22,12 @@ go run web/web.go
 ```
 
 Now open localhost:8080
+
+---
+
+women who go grpc 공부부분
+
+*TODO*
+ 1. 앱 완성
+ 2. protocol buffer 공부
+ 3. grpc 
