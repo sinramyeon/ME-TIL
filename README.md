@@ -32,6 +32,8 @@
     - [DS/Algo](#DS/Algo) 파이썬 알고리즘
     - [Basic](#Basic)
     - [Web](#Web) 파이썬 장고 백엔드
+  - [General](#General)
+    - 개발 일반 상식 및 이직준비
 <hr/>
 
 ## 9XD의 [milloy](https://github.com/milooy/TIL)님께 영감을 받아 시작했습니다.
