@@ -87,3 +87,5 @@ Be receptive to any feedback from the interviewer.
 If you can't come up with the most refined solutions right away, you can  work on the brute    force solution and improve on it - but let the interviewer know that's what you're doing.
 If you're making assumptions as you reason through the problem, be sure  to communicate those assumptions to your interviewer.
 ```
+
+면접을 보면 볼수록 단순 dfs/bfs 문제 못푸는 사람이 넘 많네요.. 여기가 왜 인력난인지 알것 같아요.. 혹시 면접 준비하시는 분 계신다면 그래프/트리 검색이랑 재귀만 제대로 아셔도 중간 이상입니다..
