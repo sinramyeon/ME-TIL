@@ -4,7 +4,7 @@
 이후에도 계속 이어나가자.
 
 - 7/22 월 코세라 알고리즘 1 주차 1,2 v
-- 7/23 화 코세라 알고리즘 1 주차 3,4
+- 7/23 화 코세라 알고리즘 1 주차 3,4 v
 - 7/24 수 코세라 알고리즘 1 주차 5,6
 - 7/25 목 코세라 알고리즘 2 주차 1,2
 ---
@@ -12,22 +12,24 @@
        big O notation ()
 - 7/27 토 코세라 알고리즘 2 주차 5,6
        list, linked list, stack, queue
-- 7/28 일 MIT Open courseware - Introduction to Algorithms 1,2,3
+- 7/28 일 MIT Open courseware - Introduction to Algorithms 1,2,3,4
        hash table, binary search, tree, binary trees
+       
 ---       
-- 7/29 월 MIT Open courseware - Introduction to Algorithms 4,5,6
-- 7/30 화 MIT Open courseware - Introduction to Algorithms 7,8,9
-- 7/31 수 MIT Open courseware - Introduction to Algorithms 10,11,12
-- 8/1 목 MIT Open courseware - Introduction to Algorithms 13,14,15
+- 7/29 월 MIT Open courseware - Introduction to Algorithms 5,6
+- 7/30 화 MIT Open courseware - Introduction to Algorithms 7,8
+- 7/31 수 MIT Open courseware - Introduction to Algorithms 9,10
+- 8/1 목 MIT Open courseware - Introduction to Algorithms 11,12
 ---
-- 8/2 금 MIT Open courseware - Introduction to Algorithms 16,17,18
+- 8/2 금 MIT Open courseware - Introduction to Algorithms 13, 14, 15
       priority queues, heap
-- 8/3 토 MIT Open courseware - Introduction to Algorithms 19,20,21
+- 8/3 토 MIT Open courseware - Introduction to Algorithms 16, 17, 18, 19
       sort(merge, quick, bubble, insert ....)
-- 8/4 일 MIT Open courseware - Introduction to Algorithms 22,23,24
-      최정 검토 영상, sedgewick, pramp
+      
+- 8/4 일 MIT Open courseware - Introduction to Algorithms 20, 21, 22,23, 24
+      최종 검토 영상, dfs/bfs, 그래프, 트리 검색
 ---
-- 8/5 월 정리노트 복습, pramp
+- 8/5 
 
 ### 인터뷰 대학
 
