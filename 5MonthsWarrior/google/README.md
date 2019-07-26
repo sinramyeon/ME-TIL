@@ -5,14 +5,14 @@
 
 - 7/22 월 코세라 알고리즘 1 주차 1,2 v
 - 7/23 화 코세라 알고리즘 1 주차 3,4 v
-- 7/24 수 코세라 알고리즘 1 주차 5,6
+- 7/24 수 코세라 알고리즘 1 주차 5,6 v
 - 7/25 목 코세라 알고리즘 2 주차 1,2
 ---
 - 7/26 금 코세라 알고리즘 2 주차 3,4
        big O notation ()
 - 7/27 토 코세라 알고리즘 2 주차 5,6
        list, linked list, stack, queue
-- 7/28 일 MIT Open courseware - Introduction to Algorithms 1,2,3,4
+- 7/28 일 MIT Open courseware - Introduction to Algorithms 1,2,3, v 4
        hash table, binary search, tree, binary trees
        
 ---       
