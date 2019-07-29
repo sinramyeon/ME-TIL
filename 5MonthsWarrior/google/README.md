@@ -12,11 +12,11 @@
        big O notation ()
 - 7/27 토 코세라 알고리즘 2 주차 5,6
        list, linked list, stack, queue
-- 7/28 일 MIT Open courseware - Introduction to Algorithms 1,2,3, v 4
+- 7/28 일 MIT Open courseware - Introduction to Algorithms 1,2,3, 4 v
        hash table, binary search, tree, binary trees
        
 ---       
-- 7/29 월 MIT Open courseware - Introduction to Algorithms 5,6
+- 7/29 월 MIT Open courseware - Introduction to Algorithms 5,6  v
 - 7/30 화 MIT Open courseware - Introduction to Algorithms 7,8
 - 7/31 수 MIT Open courseware - Introduction to Algorithms 9,10
 - 8/1 목 MIT Open courseware - Introduction to Algorithms 11,12
