@@ -42,8 +42,9 @@
 
 20200420~
 - [Algo_puzzle](#Algo_puzzle) [퍼즐로 배우는 파이썬 알고리즘](http://www.yes24.com/Product/Goods/78567028) 책 풀이기록
-
+(제대로 못 진행중...)
 ## 9XD의 [milloy](https://github.com/milooy/TIL)님께 영감을 받아 시작했습니다.
+
 
 
 :+1:  열심히 하자.
