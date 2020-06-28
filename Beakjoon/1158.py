@@ -1,3 +1,5 @@
+
+# linked list 로 풀어도 보자
 def josepus(n, k):
     # make array
     num = 1
