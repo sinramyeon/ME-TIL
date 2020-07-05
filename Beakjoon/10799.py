@@ -1,3 +1,4 @@
+### 스택으로만들어봐...
 inputs = input()
 sumval = 0
 left = 0
