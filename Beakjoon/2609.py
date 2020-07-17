@@ -16,3 +16,5 @@ def lcm(x, y):
 
 print(gcd(a, b))
 print(lcm(a, b))
+
+# c코드 https://github.com/sinramyeon/ME-TIL/blob/d0578f403d0c5bb92c39ce1430886a804d029d1b/Algorithm/gcmlcm.c
