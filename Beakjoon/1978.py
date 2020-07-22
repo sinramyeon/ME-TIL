@@ -1,3 +1,31 @@
+import math
+
+def isPrimeCheck(num):
+    if num == 1: 
+        return False
+    n = int(math.sqrt(num))
+    
+    for k in range(2, n+1):
+        if num % k == 0: 
+            print(num, k)
+            return False
+        
+    return True
+    
+def findPrime(nums):
+    primeCount = 0
+    
+    for k in nums :
+        if isPrimeCheck(k) :
+            primeCount += 1
+    print(primeCount)
+
+    
+findPrime([1, 3, 5, 7])
+
+
+
+
 # 소수찾기는 for for나 On2이라 뭐 에로토스인지 로 하라고함
 def prime_list(n):
 
