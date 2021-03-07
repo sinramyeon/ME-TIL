@@ -4,7 +4,9 @@
 
 `git merge`.
 
-A `merge` is a way to put a forked history back together. **The  `git merge`  command lets us take independent branches of development and combine them into a single branch**.
+A `merge` is a way to put a forked history back together.
+
+**The  `git merge`  command lets us take independent branches of development and combine them into a single branch**.
 
 `git merge`, the current branch will be updated to reflect the merge, but the target branch remains untouched.
 
