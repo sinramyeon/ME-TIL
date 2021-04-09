@@ -26,6 +26,21 @@ print((lambda x : x*2)(5))
 10
 10
 
+You can also put **Lambda in variable** .
+
+```
+lambdaAdd = lambda n,m:n+m
+print(lambdaAdd(2,3))
+print(lambdaAdd(4,5))
+```  
+
+Also, You can do **if eles in lambda**.
+
+```
+print((lambda n,m: n if n%2==0 else m)(1,3))
+print((lambda n,m: n if n%2==0 else m)(2,3))
+```
+
 # ANONYMOUS FUNCTION IN GO
 
 ## What are anonymous functions in Go?
@@ -87,5 +102,29 @@ value()
 ## Closures
 
 **YES.** Function literals in Go are  **closures**: they may refer to variables defined in an enclosing function.
+
+-   variables tare shared between the surrounding function and the function literal,
+-   survive as long as they are accessible.
+
+In this example, the function literal uses the local variable `n`  from the enclosing scope to count the number of times it has been invoked.
+
+```
+// New returns a function Count.
+// Count prints the number of times it has been invoked.
+func New() (Count func()) {
+    n := 0
+    return func() {
+        n++
+        fmt.Println(n)
+    }
+}
+
+func main() {
+    f1, f2 := New(), New()
+    f1() // 1
+    f2() // 1 (different n)
+    f1() // 2
+    f2() // 2
+```
 
 But, What is Closure?
