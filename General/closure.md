@@ -56,4 +56,28 @@ In this example our closure references the variable `n` even after the `newCount
 
 The closure property is used extensively where data isolation is required. The state provided by the closures makes them immensely helpful in that regard. When we want to create a state encapsulated function we use closures to do that.
 
+---
 
+```go
+package main
+
+import "fmt"
+
+func intSeq() func() int {
+	i := 0
+	return func() int {
+		i++
+		return i
+	}
+}
+
+func main() {
+	printInt := intSeq()
+	fmt.Println(printInt()) // 1
+	fmt.Println(printInt()) // 2
+
+	printInt2 := intSeq()
+	fmt.Println(printInt2()) // 1
+	fmt.Println(printInt2()) // 2
+}
+```
